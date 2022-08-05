@@ -6,3 +6,15 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+ggez = "0.8.0-rc0"
+glam = "0.20"
+rand = "0.8.4"
+# Animation dependencies
+keyframe = "1"
+keyframe_derive = "1"
+num-traits = "0.2"
+num-derive = "0.3"
+
+[profile.dev]
+opt-level = 1
+
