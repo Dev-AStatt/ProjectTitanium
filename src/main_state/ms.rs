@@ -11,6 +11,7 @@ use ggez::{
 
 use super::super::world::player::Player;
 use super::super::utilities;
+use super::super::renderer;
  
 pub struct MainState {
     pub player: Player, 

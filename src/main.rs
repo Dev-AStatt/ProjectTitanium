@@ -11,6 +11,7 @@ use ggez::*;
 mod main_state;
 mod world;
 mod utilities;
+mod renderer;
 
 // 0---------------------PROGRAM MAIN------------------------------------------0
 
