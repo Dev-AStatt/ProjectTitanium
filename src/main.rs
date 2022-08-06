@@ -34,7 +34,7 @@ pub fn main() -> GameResult {
         .window_mode(
             ggez::conf::WindowMode::default()
                 .dimensions(1024.0, 1024.0)
-                .resizable(true)
+                //.resizable(true)
         );
 
     // And finally we attempt to build the context and create the window. If it fails, we panic with the message

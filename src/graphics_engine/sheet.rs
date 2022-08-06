@@ -23,8 +23,8 @@ impl TileSheet {
             image,
             img_size,
             img_tile_buf: 1,
-            tile_col_row: glam::IVec2::new(17 , 25),
-            tile_size: glam::IVec2::new(17,17),
+            tile_col_row: glam::IVec2::new(9 , 9),
+            tile_size: glam::IVec2::new(16,16),
         }
     }
     pub fn draw_tile(
@@ -50,12 +50,12 @@ impl TileSheet {
         );
         
         let pixel_xy = (
-            (tile_xy.0 * self.tile_size.x) + self.img_tile_buf,
-            (tile_xy.1 * self.tile_size.y) + self.img_tile_buf
+            (tile_xy.0 * self.tile_size.x) + ((tile_xy.0 ) * self.img_tile_buf),
+            (tile_xy.1 * self.tile_size.y) + ((tile_xy.1 ) * self.img_tile_buf)
         );
         let pixel_wh = (
-            (self.tile_size.x - self.img_tile_buf) as f32 / self.image.width() as f32 ,
-            (self.tile_size.y - self.img_tile_buf) as f32 / self.image.height() as f32 
+            (self.tile_size.x - self.img_tile_buf) as f32 / (self.image.width() as f32 ) ,
+            (self.tile_size.y - self.img_tile_buf) as f32 / (self.image.height() as f32)
         );
 
          let rect = graphics::Rect::new(
@@ -68,6 +68,7 @@ impl TileSheet {
     }
     //Getters and Setters
     pub fn tile_size(&self) -> glam::IVec2 {return self.tile_size}
+
 }
 
 
