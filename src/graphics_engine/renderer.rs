@@ -66,13 +66,13 @@ impl Renderer {
     fn adjust_screen_offset(&mut self, offset: (f32, f32)) {
         //Method will check if the passed in offset will push too far off screen 
         //if gone too far down
-        if self.screen_offset.x + offset.0 >= 0.0 {
+        if self.screen_offset.x + offset.0 <= 0.0 {
             self.screen_offset.x += offset.0;
         } else {
             self.screen_offset.x = 0.0
         }
         //if gone too far right
-        if self.screen_offset.y + offset.1 >= 0.0 {
+        if self.screen_offset.y + offset.1 <= 0.0 {
             self.screen_offset.y += offset.1;
         } else {
             self.screen_offset.y = 0.0
