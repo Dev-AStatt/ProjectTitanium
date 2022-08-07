@@ -75,6 +75,16 @@ impl event::EventHandler<ggez::GameError> for MainState {
         Ok(())
 
     }
+
+
+    //The ggez engine will call events automatically for key and mouse events
+    fn mouse_wheel_event(&mut self, _ctx: &mut Context, _x: f32, y: f32) -> GameResult {
+        let new_scale = self.state.scale() + (y as i32);
+        self.state.set_scale(new_scale);
+        Ok(())
+    }
+
+
 }
 
 
