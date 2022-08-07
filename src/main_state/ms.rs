@@ -9,15 +9,22 @@ use ggez::{
     input::keyboard::{KeyCode, KeyInput},
 };
 
-use crate::world::world::World;
+use super::game_state::GameState;
+use super::super::{
+    graphics_engine::renderer,
+    world::{
+        world::World,
+        player::Player
+    },
+};
 
-use super::super::world::player::Player;
-use super::super::graphics_engine::renderer;
- 
+
+
 pub struct MainState {
     pub renderer: renderer::Renderer,
     pub player: Player, 
     pub world: World,
+    pub state: GameState,
 }
 
 impl MainState {
@@ -28,6 +35,8 @@ impl MainState {
             renderer: renderer::Renderer::new(ctx),
             player: Player::new(),
             world: World::new(),
+            state: GameState::new()
+            
         };
         Ok(ms) 
     }
@@ -36,6 +45,7 @@ impl MainState {
 impl event::EventHandler<ggez::GameError> for MainState {
 
     fn update(&mut self, ctx: &mut Context) -> Result<(), ggez::GameError> {
+
         Ok(()) 
     }
 
@@ -46,6 +56,11 @@ impl event::EventHandler<ggez::GameError> for MainState {
             ctx,
             graphics::CanvasLoadOp::Clear(graphics::Color::BLACK)
         );
+        self.state.set_screen_size(glam::Vec2::new(
+            canvas.screen_coordinates().unwrap().w, 
+            canvas.screen_coordinates().unwrap().h
+        ));
+        
         //this sets the sampler rate to be nearest completion, for 2d sprites
         canvas.set_sampler(Sampler::nearest_clamp());
         self.renderer.draw_route(&mut canvas, self.world.current_route());
