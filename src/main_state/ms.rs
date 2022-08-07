@@ -50,20 +50,24 @@ impl event::EventHandler<ggez::GameError> for MainState {
     }
 
     fn draw(&mut self, ctx: &mut Context) -> Result<(), ggez::GameError> {
-       
         //Clear the screen
         let mut canvas = graphics::Canvas::from_frame(
             ctx,
             graphics::CanvasLoadOp::Clear(graphics::Color::BLACK)
         );
+        //Give the screen size to gamestate
         self.state.set_screen_size(glam::Vec2::new(
             canvas.screen_coordinates().unwrap().w, 
             canvas.screen_coordinates().unwrap().h
         ));
-        
         //this sets the sampler rate to be nearest completion, for 2d sprites
         canvas.set_sampler(Sampler::nearest_clamp());
-        self.renderer.draw_route(&mut canvas, self.world.current_route());
+
+        self.renderer.draw_route(
+            &mut canvas, 
+            self.world.current_route(),
+            &self.state
+        );
         self.draw_debug_info(&mut canvas, ctx);
 
 
@@ -71,7 +75,6 @@ impl event::EventHandler<ggez::GameError> for MainState {
         Ok(())
 
     }
-
 }
 
 

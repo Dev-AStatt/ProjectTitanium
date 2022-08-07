@@ -38,7 +38,7 @@ impl TileSheet {
         canvas: &mut graphics::Canvas,
         tile: i32, 
         dest: glam::Vec2,
-        scale: f32,
+        scale: i32,
     ) {
         let rect = self.calc_tile_rect(tile);
         canvas.draw(
@@ -46,7 +46,7 @@ impl TileSheet {
             graphics::DrawParam::new()
                 .src(rect)
                 .dest(dest)
-                .scale([scale * rect.w, scale * rect.h])
+                .scale([scale as f32 * rect.w, scale as f32 * rect.h])
         );
     }
 
