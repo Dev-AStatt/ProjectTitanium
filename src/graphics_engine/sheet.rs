@@ -45,6 +45,7 @@ impl TileSheet {
                 .src(rect)
                 .dest(dest)
                 .scale([scale * rect.w, scale * rect.h])
+                
         );
         
     }

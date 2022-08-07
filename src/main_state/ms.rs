@@ -3,7 +3,7 @@
 
 use ggez::{
     event::{self, MouseButton},
-    graphics,
+    graphics::{self, Drawable, Sampler},
     Context,
     GameResult,
     input::keyboard::{KeyCode, KeyInput},
@@ -47,7 +47,7 @@ impl event::EventHandler<ggez::GameError> for MainState {
             graphics::CanvasLoadOp::Clear(graphics::Color::BLACK)
         );
 
-        self.draw_debug_info(&mut canvas, ctx);
+        canvas.set_sampler(Sampler::nearest_clamp());
         self.renderer.draw_route(&mut canvas, self.world.current_route());
         
 

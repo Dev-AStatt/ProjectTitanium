@@ -36,7 +36,6 @@ pub fn main() -> GameResult {
                 .dimensions(1024.0, 1024.0)
                 //.resizable(true)
         );
-
     // And finally we attempt to build the context and create the window. If it fails, we panic with the message
     // "Failed to build ggez context"
     let (mut ctx, event_loop) = cb.build()?;

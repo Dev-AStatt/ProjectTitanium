@@ -24,10 +24,9 @@ impl Renderer {
         canvas: &mut graphics::Canvas,
         route: &Route,
     ) {
-        self.tile_sheet.draw_tile(canvas, 1, glam::Vec2::new(0.0,0.0), 5.0);
+        //self.tile_sheet.draw_tile(canvas, 1, glam::Vec2::new(0.0,0.0), 5.0);
         //let next_dest = 3.0 * 16.0;
         //self.tile_sheet.draw_tile(canvas, 29, glam::Vec2::new(next_dest,0.0), 3.0);
-/*
        let tile_spacing = self.scale as i32 * 15; 
         for i in 0..route.tiles().len() {
             let screen_dest = glam::IVec2::new(
@@ -42,7 +41,6 @@ impl Renderer {
             );
 
         } 
-*/
     }
 }
 
