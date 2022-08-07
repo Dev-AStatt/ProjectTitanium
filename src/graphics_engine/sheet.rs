@@ -4,9 +4,8 @@ use super::super::utilities;
 
 pub struct TileSheet {
     image: graphics::Image,
-    img_size: glam::UVec2,
     img_tile_buf: i32,
-    tile_col_row: glam::IVec2,
+    tiles_col_row: glam::IVec2,
     tile_size: glam::IVec2,
     pixel_wh: glam::Vec2,
 }
@@ -14,23 +13,22 @@ pub struct TileSheet {
 impl TileSheet {
     pub fn new(
         ctx: &mut Context,
-        img_path: &str
+        img_path: &str,
+        tile_size: glam::IVec2,
+        tiles_col_row: glam::IVec2,
     ) -> TileSheet {
         
         let image = utilities::load_image(ctx, img_path);
-        let img_size = glam::UVec2::new(image.width(), image.height());
-        let tile_size = glam::IVec2::new(16,16);
         let pixel_wh = glam::Vec2::new(
-            (tile_size.x ) as f32 / (image.width() as f32 ) ,
-            (tile_size.y ) as f32 / (image.height() as f32)
+            (tile_size.x) as f32 / (image.width() as f32 ) ,
+            (tile_size.y) as f32 / (image.height() as f32)
         );
 
 
         TileSheet {
             image,
-            img_size,
             img_tile_buf: 1,
-            tile_col_row: glam::IVec2::new(9 , 9),
+            tiles_col_row,
             tile_size,
             pixel_wh,
         }
@@ -43,23 +41,19 @@ impl TileSheet {
         scale: f32,
     ) {
         let rect = self.calc_tile_rect(tile);
-        
-
-
         canvas.draw(
             &self.image,
             graphics::DrawParam::new()
                 .src(rect)
                 .dest(dest)
                 .scale([scale * rect.w, scale * rect.h])
-                
         );
-        
     }
+
     fn calc_tile_rect(&self, tile: i32) -> graphics::Rect {
         let tile_xy = (
-            tile % self.tile_col_row.x,
-            tile / self.tile_col_row.x
+            tile % self.tiles_col_row.x,
+            tile / self.tiles_col_row.x
         );
         let pixel_xy = (
             (tile_xy.0 * self.tile_size.x) + (tile_xy.0 * 1 + self.img_tile_buf),
