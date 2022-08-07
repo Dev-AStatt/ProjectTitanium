@@ -14,9 +14,9 @@ impl Renderer {
         
         let tile_sheet = TileSheet::new(
             ctx, 
-            "/Pokemon_Tile_sheet.png",
+            "/titanium_tile_sheet_v01.png",
             glam::IVec2::new(16,16), //Tile Pixel Size
-            glam::IVec2::new(9,9)
+            glam::IVec2::new(80,80)
         );
         Renderer {
             tile_sheet,
