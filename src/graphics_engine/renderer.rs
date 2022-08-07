@@ -12,7 +12,7 @@ pub struct Renderer {
 impl Renderer {
     pub fn new(ctx: &mut Context) -> Renderer {
         
-        let tile_sheet = TileSheet::new(ctx, "/tilesheet_small_boarderless.png");
+        let tile_sheet = TileSheet::new(ctx, "/Pokemon_Tile_sheet.png");
         let scale = 5.0;
         Renderer {
             tile_sheet,

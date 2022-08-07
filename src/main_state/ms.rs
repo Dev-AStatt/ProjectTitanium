@@ -46,10 +46,10 @@ impl event::EventHandler<ggez::GameError> for MainState {
             ctx,
             graphics::CanvasLoadOp::Clear(graphics::Color::BLACK)
         );
-
+        //this sets the sampler rate to be nearest completion, for 2d sprites
         canvas.set_sampler(Sampler::nearest_clamp());
         self.renderer.draw_route(&mut canvas, self.world.current_route());
-        
+        self.draw_debug_info(&mut canvas, ctx);
 
 
         canvas.finish(ctx)?;
