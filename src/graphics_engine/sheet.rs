@@ -61,12 +61,10 @@ impl TileSheet {
             tile % self.tile_col_row.x,
             tile / self.tile_col_row.x
         );
-        println!("Tile_XY: X: {}, Y: {}", tile_xy.0, tile_xy.1);
         let pixel_xy = (
             (tile_xy.0 * self.tile_size.x) + (tile_xy.0 * 1 + self.img_tile_buf),
             (tile_xy.1 * self.tile_size.y) + (tile_xy.1 * 1 + self.img_tile_buf)
         );
-        println!("Tile_Pixels: X: {}, Y: {}", pixel_xy.0, pixel_xy.1);
          let rect = graphics::Rect::new(
             pixel_xy.0 as f32 / self.image.width() as f32,
             pixel_xy.1 as f32 / self.image.height() as f32,
