@@ -1,7 +1,7 @@
 //struct to contain the world information
 
-use glam::IVec2;
-
+use csv;
+use std::error::Error;
 
 pub struct World {
     current_route: Route,
@@ -26,6 +26,10 @@ pub struct Route {
 impl Route {
     pub fn new() -> Route {
         let tiles = get_route1(); 
+        
+        if let Err(err) = read_from_file("route1.csv") {
+            println!("{}", err);
+        }
         Route{
             size: glam::IVec2::new(24,31),
             tiles,
@@ -35,6 +39,28 @@ impl Route {
     pub fn tiles(&self) -> &Vec<i32> {return &self.tiles} 
     pub fn tile_at(&self, i: usize) -> i32 {return self.tiles[i]}
 }
+
+
+
+/// Reads data from a file into a reader and prints all records.
+///
+/// # Error
+///
+/// If an error occurs, the error is returned to `main`.
+fn read_from_file(path: &str) -> Result<(), Box<dyn Error>> {
+    // Creates a new csv `Reader` from a file
+    let mut reader = csv::Reader::from_path(path)?;
+    // `.records` return an iterator of the internal
+    // record structure
+    for result in reader.records() {
+        let record = result?;
+
+        println!("{:?}", record);
+    }
+
+    Ok(())
+}
+
 
 fn get_route_test() -> Vec<i32> {
     //size is 9,9
