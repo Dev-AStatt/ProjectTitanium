@@ -49,8 +49,8 @@ impl TileSheet {
 
     fn calc_tile_rect(&self, tile: i32) -> graphics::Rect {
         let tile_xy = (
-            tile % self.tiles_col_row.x,
-            tile / self.tiles_col_row.x
+            (tile - 1) % self.tiles_col_row.x,
+            (tile - 1) / self.tiles_col_row.x 
         );
         let pixel_xy = (
             (tile_xy.0 * self.tile_size.x),

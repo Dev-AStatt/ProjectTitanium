@@ -1,6 +1,6 @@
 //This struct will handle the rendering of the game
 use ggez::{Context, graphics};
-use crate::{world::world::Route, main_state::game_state::GameState};
+use crate::{world::route::Route, main_state::game_state::GameState};
 
 use super::sheet::TileSheet;
 
@@ -16,7 +16,7 @@ impl Renderer {
             ctx, 
             "/titanium_tile_sheet_v01.png",
             glam::IVec2::new(16,16), //Tile Pixel Size
-            glam::IVec2::new(80,80)
+            glam::IVec2::new(50,50)
         );
         Renderer {
             tile_sheet,
@@ -64,20 +64,9 @@ impl Renderer {
     } 
 
     fn adjust_screen_offset(&mut self, offset: (f32, f32)) {
-        //Method will check if the passed in offset will push too far off screen 
-        //if gone too far down
-        if self.screen_offset.x + offset.0 <= 0.0 {
-            self.screen_offset.x += offset.0;
-        } else {
-            self.screen_offset.x = 0.0
-        }
-        //if gone too far right
-        if self.screen_offset.y + offset.1 <= 0.0 {
-            self.screen_offset.y += offset.1;
-        } else {
-            self.screen_offset.y = 0.0
-        }
+        self.screen_offset += glam::Vec2::new(offset.0, offset.1);
     }
+
 
 }
 
