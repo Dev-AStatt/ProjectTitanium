@@ -1,12 +1,19 @@
 //This struct will handle the rendering of the game
 use ggez::{Context, graphics};
-use crate::{world::route::Route, main_state::game_state::GameState};
-
+use super::super::{
+    world::{route::Route, player},
+    main_state::game_state
+};
 use super::sheet::TileSheet;
+use super::player_sheet::PlayerSheet;
+use super::super::utilities::Direction;
+use super::frame::{Frame, FrameState};
 
 pub struct Renderer {
     tile_sheet: TileSheet,
-    screen_offset: glam::Vec2,
+    player_sheet: PlayerSheet,
+    frame: Frame,
+    screen_move: bool,
 }
 
 impl Renderer {
@@ -18,56 +25,93 @@ impl Renderer {
             glam::IVec2::new(16,16), //Tile Pixel Size
             glam::IVec2::new(50,50)
         );
+        let frame = Frame::new();
         Renderer {
             tile_sheet,
-            screen_offset: glam::Vec2::new(0.0,0.0),
+            player_sheet: PlayerSheet::new(ctx),
+            frame,
+            screen_move: false,
         }
     }
-    pub fn draw_route(
+
+    pub fn update(
+        self: &mut Self,
+        state: &game_state::GameState,
+    ) {
+        self.frame.update(self.tile_sheet.tile_size().x as f32);
+    }
+
+    pub fn draw(
+        self: &mut Self,
+        canvas: &mut graphics::Canvas,
+        state: &game_state::GameState,
+        route: &Route,
+        player: &player::Player,
+    ) {
+        
+        match state.state_type() {
+            game_state::StateType::Overworld => {
+                self.draw_route(canvas, state, route);
+                self.draw_player(canvas, state, player);
+            }
+            _ => {}
+        }
+    }
+    
+
+    fn draw_player(
         &self,
         canvas: &mut graphics::Canvas,
+        state: &game_state::GameState,
+        player: &player::Player,
+
+    ) {
+        let dest = self.player_dest(state);
+        self.player_sheet.draw(
+            canvas, 
+            player, 
+            dest,
+            self.frame.scale_f32(), 
+            self.frame.state()
+        );
+    }
+
+    fn player_dest(
+        &self, 
+        state: &game_state::GameState,
+    ) -> glam::Vec2 {
+        let screen_center_tile = state.screen_size() / 2.0;
+        return screen_center_tile; 
+    }
+
+
+    fn draw_route(
+        &self,
+        canvas: &mut graphics::Canvas,
+        state: &game_state::GameState,
         route: &Route,
-        state: &GameState,
     ) {
         //get the pixel spacing between tiles
-       let tile_spacing = state.scale() * 16; 
+       let tile_spacing = self.frame.scale_i32() * 16; 
         for i in 0..route.tiles().len() {
             let init_dest = glam::IVec2::new(
                 (i as i32 % route.size().x) * tile_spacing,
                 (i as i32 / route.size().x) * tile_spacing 
             ); 
-            let final_dest = init_dest.as_vec2() + self.screen_offset;
+            let final_dest = init_dest.as_vec2() + self.frame.offset();
             self.tile_sheet.draw_tile(
                 canvas,
                 route.tile_at(i),
                 final_dest,
-                state.scale()
+                self.frame.scale_f32()
             );
         } 
     }
 
-    pub fn move_screen_up(&mut self, scale: i32) {
-        let offset = 0.5 * self.tile_sheet.tile_size().y as f32 * scale as f32 ;
-            self.adjust_screen_offset((0.0, offset));
-    } 
-    pub fn move_screen_down(&mut self, scale: i32) {
-        let offset = 0.5 * self.tile_sheet.tile_size().y as f32 * scale as f32 ;
-            self.adjust_screen_offset((0.0, -1.0 * offset));
-    } 
-    pub fn move_screen_left(&mut self, scale: i32) {
-        let offset = 0.5 * self.tile_sheet.tile_size().x as f32 * scale as f32 ;
-        self.adjust_screen_offset((offset,0.0));
-    } 
-    pub fn move_screen_right(&mut self, scale: i32) {
-        let offset = 0.5 * self.tile_sheet.tile_size().x as f32 * scale as f32 ;
-        self.adjust_screen_offset((-1.0 * offset,0.0));
-    } 
-
-    fn adjust_screen_offset(&mut self, offset: (f32, f32)) {
-        self.screen_offset += glam::Vec2::new(offset.0, offset.1);
+    pub fn move_screen(self: &mut Self, d: Direction) {
+        self.frame.move_frame(d, self.tile_sheet.tile_size().x as f32);
     }
-
-
+    pub fn adj_scale(self: &mut Self, inc: i32) {self.frame.inc_scale(inc);}
 }
 
 

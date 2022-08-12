@@ -46,7 +46,7 @@ impl MainState {
 impl event::EventHandler<ggez::GameError> for MainState {
 
     fn update(&mut self, ctx: &mut Context) -> Result<(), ggez::GameError> {
-
+        self.renderer.update(&self.state);
         Ok(()) 
     }
 
@@ -64,10 +64,11 @@ impl event::EventHandler<ggez::GameError> for MainState {
         //this sets the sampler rate to be nearest completion, for 2d sprites
         canvas.set_sampler(Sampler::nearest_clamp());
 
-        self.renderer.draw_route(
+        self.renderer.draw(
             &mut canvas, 
-            self.world.current_route(),
-            &self.state
+            &self.state, 
+            &self.world.current_route(), 
+            &self.player
         );
         self.draw_debug_info(&mut canvas, ctx);
 
