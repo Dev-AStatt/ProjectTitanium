@@ -22,7 +22,7 @@ impl GameState {
        Self {
             on_start: true,
             state_type: StateType::Overworld,
-            scale: 5,
+            scale: 3,
             screen_size: glam::Vec2::new(0.0,0.0),
         }
     }
