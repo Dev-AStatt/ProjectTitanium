@@ -1,5 +1,6 @@
 
 use glam;
+use super::super::utilities::Direction;
 
 #[derive(Copy, Clone)]
 pub enum PlayerAction {
@@ -7,15 +8,6 @@ pub enum PlayerAction {
     Walking,
     Running,
 }
-
-#[derive(Copy, Clone)]
-pub enum Direction {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
 
 pub struct Player {
     pos: glam::IVec2,
