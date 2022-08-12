@@ -25,7 +25,6 @@ pub struct Route {
 
 impl Route {
     pub fn new() -> Route {
-        read_from_file("route1.csv");
         let tiles = get_route1(); 
         Route{
             size: glam::IVec2::new(24,31),
@@ -39,24 +38,6 @@ impl Route {
 
 
 
-/// Reads data from a file into a reader and prints all records.
-///
-/// # Error
-///
-/// If an error occurs, the error is returned to `main`.
-fn read_from_file(path: &str) {
-    // Creates a new csv `Reader` from a file
-    let mut reader = csv::Reader::from_path(path).unwrap();
-    // `.records` return an iterator of the internal
-    // record structure
-    let mut v: Vec<String> = vec![];
-
-    for result in reader.records().into_iter() {
-        let record = result.unwrap();
-        v.push(record[0].to_string());
-    }
-    println!("{:?}", v);
-}
 
 
 fn get_route_test() -> Vec<i32> {
