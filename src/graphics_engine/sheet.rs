@@ -4,7 +4,6 @@ use super::super::utilities;
 
 pub struct TileSheet {
     image: graphics::Image,
-    img_tile_buf: i32,
     tiles_col_row: glam::IVec2,
     tile_size: glam::IVec2,
     pixel_wh: glam::Vec2,
@@ -24,10 +23,8 @@ impl TileSheet {
             (tile_size.y) as f32 / (image.height() as f32)
         );
 
-
         TileSheet {
             image,
-            img_tile_buf: 1,
             tiles_col_row,
             tile_size,
             pixel_wh,
@@ -52,12 +49,12 @@ impl TileSheet {
 
     fn calc_tile_rect(&self, tile: i32) -> graphics::Rect {
         let tile_xy = (
-            tile % self.tiles_col_row.x,
-            tile / self.tiles_col_row.x
+            (tile - 1) % self.tiles_col_row.x,
+            (tile - 1) / self.tiles_col_row.x 
         );
         let pixel_xy = (
-            (tile_xy.0 * self.tile_size.x) + (tile_xy.0 * 1 + self.img_tile_buf),
-            (tile_xy.1 * self.tile_size.y) + (tile_xy.1 * 1 + self.img_tile_buf)
+            (tile_xy.0 * self.tile_size.x),
+            (tile_xy.1 * self.tile_size.y)
         );
          let rect = graphics::Rect::new(
             pixel_xy.0 as f32 / self.image.width() as f32,

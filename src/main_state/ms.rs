@@ -9,7 +9,8 @@ use ggez::{
     input::keyboard::{KeyCode, KeyInput},
 };
 
-use super::game_state::GameState;
+
+use super::game_state::{GameState, StateType};
 use super::super::{
     graphics_engine::renderer,
     world::{
@@ -75,6 +76,26 @@ impl event::EventHandler<ggez::GameError> for MainState {
         Ok(())
 
     }
+
+
+    //The ggez engine will call events automatically for key and mouse events
+    fn mouse_wheel_event(&mut self, _ctx: &mut Context, _x: f32, y: f32) -> GameResult {
+        let new_scale = self.state.scale() + (y as i32);
+        self.state.set_scale(new_scale);
+        Ok(())
+    }
+
+    //The ggez engine will call events automatically for key and mouse events
+    fn key_up_event(&mut self, _ctx: &mut Context, input: KeyInput) -> GameResult {
+        
+        match self.state.state_type() {
+            StateType::Overworld => {self.io_overworld(input)}
+            _ => (),
+        }
+        Ok(())
+    }
+
+
 }
 
 
