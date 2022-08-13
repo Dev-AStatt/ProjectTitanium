@@ -61,7 +61,7 @@ impl PlayerSheet {
         scale: f32,
         frame: FrameState, 
     ) {
-        let rect = self.calc_player_rect(player.current_action(), frame);  
+        let rect = self.calc_player_rect(player, frame);  
         canvas.draw(
             &self.image,
             graphics::DrawParam::new()
@@ -74,17 +74,18 @@ impl PlayerSheet {
     //function will select the correct sprite to display 
     fn calc_player_rect(
         &self, 
-        action: player::PlayerAction,
+        player: &player::Player,
         frame: FrameState,
     ) -> graphics::Rect {
 
         //Start with the idle sprite down at 0,0 
         let mut img_xy = glam::UVec2::new(0,0);
         //match the row for what action is hammening
-        match action {
+        match player.current_action() {
             player::PlayerAction::Idle => {}        //Do nothing
             player::PlayerAction::Walking => {
                 if frame == FrameState::Mid {
+                    //if we are in a midframe, show the right or left midframe
                     match self.midframe {
                         SpriteMidFrame::Right => {img_xy.y += 2}
                         SpriteMidFrame::Left => {img_xy.y += 4}
@@ -93,6 +94,16 @@ impl PlayerSheet {
             }
             player::PlayerAction::Running => {}
         }
+
+        //match the direction of the player
+        match player.direction() {
+            utilities::Direction::Up => {img_xy.x += 1}
+            utilities::Direction::Down => {}
+            utilities::Direction::Left => {img_xy.x += 2}
+            utilities::Direction::Right => {img_xy.x += 3}
+        }
+
+
         let pixel_xy = img_xy * self.sprite_size;
 
         let rect: graphics::Rect = graphics::Rect::new(
