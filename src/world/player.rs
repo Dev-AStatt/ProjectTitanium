@@ -19,7 +19,7 @@ impl Player {
     pub fn new() -> Player {
         Player {
             pos: glam::IVec2::new(10,10),
-            action: PlayerAction::Idle,
+            action: PlayerAction::Walking,
             direction: Direction::Down,
         }
     }
@@ -35,5 +35,7 @@ impl Player {
     pub fn current_action(&self) -> PlayerAction {return self.action}
     pub fn position(&self) -> glam::IVec2 {return self.pos}
     pub fn direction(&self) -> Direction {return self.direction}
+
+    pub fn set_direction(&mut self, d: Direction) {self.direction = d}
 }
 

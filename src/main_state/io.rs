@@ -8,12 +8,17 @@ impl ms::MainState {
     pub fn io_overworld(&mut self, input: KeyInput) {
         
         match input.keycode {
-            Some(KeyCode::Up   ) => {self.renderer.move_screen(Direction::Up)}
-            Some(KeyCode::Down ) => {self.renderer.move_screen(Direction::Down)}
-            Some(KeyCode::Left ) => {self.renderer.move_screen(Direction::Left)}
-            Some(KeyCode::Right) => {self.renderer.move_screen(Direction::Right)}
+            Some(KeyCode::Up   ) => {self.update_movement(Direction::Up)}
+            Some(KeyCode::Down ) => {self.update_movement(Direction::Down)}
+            Some(KeyCode::Left ) => {self.update_movement(Direction::Left)}
+            Some(KeyCode::Right) => {self.update_movement(Direction::Right)}
             _ => (),
         }
+    }
+
+    fn update_movement(&mut self, d: Direction) {
+        self.renderer.move_screen(d);
+        self.player.set_direction(d);
     }
 }
 
