@@ -37,8 +37,14 @@ impl Renderer {
     pub fn update(
         self: &mut Self,
         state: &game_state::GameState,
+        player: &player::Player,
+        time_delta: f32,
     ) {
-        self.frame.update(self.tile_sheet.tile_size().x as f32);
+        self.frame.update(
+            self.tile_sheet.tile_size().x as f32,
+            player.movement_speed(),
+            time_delta,
+        );
     }
 
     pub fn draw(

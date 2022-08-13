@@ -20,6 +20,7 @@ pub struct Frame {
     offset: glam::Vec2,
     direction: Option<Direction>,
     scale: i32,
+    acc_time: f32,
 }
 
 impl Frame {
@@ -29,26 +30,43 @@ impl Frame {
             offset: glam::Vec2::new(0.0,0.0),
             direction: None,
             scale: 3,
+            acc_time: 0.0,
         }
     }
 
     pub fn update(
         self: &mut Self,
         tile_size: f32,
+        movement_speed: f32,
+        time_delta: f32,
     ) {
+        
         if let Some(d) = self.direction {
-            self.move_offset(d, tile_size);
-            self.frame_state = FrameState::Full;
-            self.direction = None;
-        }
+            self.acc_time += time_delta;
+            if self.check_time(movement_speed) {
+                self.move_offset(d, tile_size);
+                self.frame_state = FrameState::Full;
+                self.direction = None;
+                self.acc_time = 0.0;
+            }
+       }
     }
+
+    fn check_time(self: &mut Self, movement_speed: f32) -> bool {
+        if self.acc_time >= (0.3 / movement_speed) {return true}
+        else {return false}
+    }
+
+
     pub fn move_frame(
         self: &mut Self, 
         new_direction: Direction,
         tile_size: f32,
     ) {
+        if self.frame_state == FrameState::Mid {return}
         self.frame_state = FrameState::Mid;
         self.direction = Some(new_direction);
+        self.acc_time = 0.0;
         self.move_offset(new_direction, tile_size);
     }
 

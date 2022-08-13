@@ -2,6 +2,7 @@
 
 
 use ggez::{
+    timer,
     event::{self, MouseButton},
     graphics::{self, Drawable, Sampler},
     Context,
@@ -46,7 +47,11 @@ impl MainState {
 impl event::EventHandler<ggez::GameError> for MainState {
 
     fn update(&mut self, ctx: &mut Context) -> Result<(), ggez::GameError> {
-        self.renderer.update(&self.state);
+        self.renderer.update(
+            &self.state, 
+            &self.player,
+            ctx.time.delta().as_secs_f32()
+        );
         Ok(()) 
     }
 
@@ -100,6 +105,7 @@ impl event::EventHandler<ggez::GameError> for MainState {
         }
         Ok(())
     }
+
 
 
 }
