@@ -33,8 +33,7 @@ pub fn main() -> GameResult {
         // Now we get to set the size of the window, which we use our SCREEN_SIZE constant from earlier to help with
         .window_mode(
             ggez::conf::WindowMode::default()
-                .dimensions(1024.0, 1024.0)
-                .resizable(true)
+                .dimensions(1008.0, 960.0)
         );
     // And finally we attempt to build the context and create the window. If it fails, we panic with the message
     // "Failed to build ggez context"
