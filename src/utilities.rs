@@ -11,8 +11,6 @@ pub enum Direction {
 //Function will take a path to the sprite that wants to load and return either
 //that sprite or a red cube of 5x5 if there was an error
 pub fn load_image(ctx: &Context, path: &str) -> graphics::Image {
-    let img = graphics::Image::from_path(ctx, path, true);
-
     match graphics::Image::from_path(ctx, path, true) {
         Ok(it) => {
             return it;

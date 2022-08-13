@@ -10,7 +10,7 @@ use super::ms;
 impl ms::MainState {
     pub fn draw_debug_info(
         &self,
-        canvas: &mut graphics::Canvas,
+        _canvas: &mut graphics::Canvas,
         ctx: &mut Context,
     ) {
         

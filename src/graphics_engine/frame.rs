@@ -40,9 +40,6 @@ impl Frame {
 
     pub fn update(
         self: &mut Self,
-        tile_size: f32,
-        movement_speed: f32,
-        time_delta: f32,
     ) {
         self.just_flipped = false;
         if self.frame_state == FrameState::Mid 
@@ -76,7 +73,7 @@ impl Frame {
         self: &mut Self, 
         new_direction: Direction,
     ) {
-        let mut adj: f32 = (self.tile_size * self.scale_f32()) / self.tile_size as f32;
+        let adj: f32 = (self.tile_size * self.scale_f32()) / self.tile_size as f32;
         match new_direction {
             Direction::Up => {self.inc_offset((0.0, adj))}
             Direction::Down => {self.inc_offset((0.0, -1.0 * adj))}

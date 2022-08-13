@@ -7,7 +7,7 @@ use super::super::{
 use super::sheet::TileSheet;
 use super::player_sheet::PlayerSheet;
 use super::super::utilities::Direction;
-use super::frame::{Frame, FrameState};
+use super::frame::Frame;
 
 pub struct Renderer {
     tile_sheet: TileSheet,
@@ -41,15 +41,11 @@ impl Renderer {
 
     pub fn update(
         self: &mut Self,
-        state: &game_state::GameState,
-        player: &player::Player,
-        time_delta: f32,
+        _state: &game_state::GameState,
+        _player: &player::Player,
+        _time_delta: f32,
     ) {
-        self.frame.update(
-            self.tile_sheet.tile_size().x as f32,
-            player.movement_speed(),
-            time_delta,
-        );
+        self.frame.update();
         if self.frame.just_flipped() {
             self.player_sheet.next_midframe();
         }
@@ -65,8 +61,8 @@ impl Renderer {
         
         match state.state_type() {
             game_state::StateType::Overworld => {
-                self.draw_route(canvas, state, route);
-                self.draw_player(canvas, state, player);
+                self.draw_route(canvas, route);
+                self.draw_player(canvas, player);
             }
             _ => {}
         }
@@ -76,7 +72,6 @@ impl Renderer {
     fn draw_player(
         &self,
         canvas: &mut graphics::Canvas,
-        state: &game_state::GameState,
         player: &player::Player,
 
     ) {
@@ -95,7 +90,6 @@ impl Renderer {
     fn draw_route(
         &self,
         canvas: &mut graphics::Canvas,
-        state: &game_state::GameState,
         route: &Route,
     ) {
         //get the pixel spacing between tiles
