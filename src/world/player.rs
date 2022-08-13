@@ -23,6 +23,15 @@ impl Player {
             direction: Direction::Down,
         }
     }
+
+    pub fn movement_speed(&self) -> f32 {
+        match self.action {
+            PlayerAction::Idle => {return 1.0}
+            PlayerAction::Walking => {return 1.0}
+            PlayerAction::Running => {return 2.0}
+        }
+    }
+
     pub fn current_action(&self) -> PlayerAction {return self.action}
     pub fn position(&self) -> glam::IVec2 {return self.pos}
     pub fn direction(&self) -> Direction {return self.direction}
