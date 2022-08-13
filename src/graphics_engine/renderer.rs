@@ -14,6 +14,7 @@ pub struct Renderer {
     player_sheet: PlayerSheet,
     frame: Frame,
     screen_move: bool,
+    player_dest: glam::Vec2,
 }
 
 impl Renderer {
@@ -26,11 +27,15 @@ impl Renderer {
             glam::IVec2::new(50,50)
         );
         let frame = Frame::new(tile_sheet.tile_size().x as f32);
+        let player_dest =player_dest(frame.scale_f32(), tile_sheet.tile_size().x as f32); 
         Renderer {
             tile_sheet,
             player_sheet: PlayerSheet::new(ctx),
+            player_dest, 
             frame,
             screen_move: false,
+            
+            
         }
     }
 
@@ -75,23 +80,16 @@ impl Renderer {
         player: &player::Player,
 
     ) {
-        let dest = self.player_dest(state);
         self.player_sheet.draw(
             canvas, 
             player, 
-            dest,
+            self.player_dest,
             self.frame.scale_f32(), 
             self.frame.state()
         );
     }
 
-    fn player_dest(
-        &self, 
-        state: &game_state::GameState,
-    ) -> glam::Vec2 {
-        let screen_center_tile = state.screen_size() / 2.0;
-        return screen_center_tile; 
-    }
+    
 
 
     fn draw_route(
@@ -122,7 +120,12 @@ impl Renderer {
 }
 
 
-
+fn player_dest(scale: f32, size: f32) -> glam::Vec2 {
+        //screen size is 21, 20 tiles or 1008,960 pixels
+        let center_tile = glam::Vec2::new(10.0, 9.0);
+        let center_pixels = center_tile * scale * size;
+        return center_pixels; 
+    }
 
 
 
