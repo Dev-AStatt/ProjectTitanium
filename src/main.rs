@@ -29,7 +29,7 @@ pub fn main() -> GameResult {
         //Tell context builder where to find the resources for our game
         .add_resource_path(resource_dir)
         // Next we set up the window. This title will be displayed in the title bar of the window.
-        .window_setup(ggez::conf::WindowSetup::default().title("Titanium"))
+        .window_setup(ggez::conf::WindowSetup::default().title("Titanium").vsync(true))
         // Now we get to set the size of the window, which we use our SCREEN_SIZE constant from earlier to help with
         .window_mode(
             ggez::conf::WindowMode::default()
