@@ -100,11 +100,20 @@ impl event::EventHandler<ggez::GameError> for MainState {
     //The ggez engine will call events automatically for key and mouse events
     fn key_up_event(&mut self, _ctx: &mut Context, input: KeyInput) -> GameResult {
         //we match the state type to isolate what keys do        
-        match self.state.state_type() {
+               Ok(())
+    }
+    fn key_down_event(
+            &mut self,
+            ctx: &mut Context,
+            input: KeyInput,
+            _repeated: bool,
+        ) -> Result<(), ggez::GameError> {
+         match self.state.state_type() {
             StateType::Overworld => {self.io_overworld(input)}
             _ => (),
         }
         Ok(())
+
     }
 
 
