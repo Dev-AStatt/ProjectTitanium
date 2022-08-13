@@ -19,18 +19,22 @@ pub struct Frame {
     frame_state: FrameState,
     offset: glam::Vec2,
     direction: Option<Direction>,
+    tile_size: f32,
     scale: i32,
-    acc_time: f32,
+    acc_shift: f32,
+    just_flipped: bool,
 }
 
 impl Frame {
-    pub fn new() -> Frame {
+    pub fn new(tile_size: f32) -> Frame {
         Frame {
             frame_state: FrameState::Full,
             offset: glam::Vec2::new(0.0,0.0),
             direction: None,
             scale: 3,
-            acc_time: 0.0,
+            acc_shift: 0.0,
+            tile_size,
+            just_flipped: false,
         }
     }
 
@@ -40,42 +44,39 @@ impl Frame {
         movement_speed: f32,
         time_delta: f32,
     ) {
-        
-        if let Some(d) = self.direction {
-            self.acc_time += time_delta;
-            if self.check_time(movement_speed) {
-                self.move_offset(d, tile_size);
-                self.frame_state = FrameState::Full;
-                self.direction = None;
-                self.acc_time = 0.0;
+        self.just_flipped = false;
+        if self.frame_state == FrameState::Mid 
+        && self.acc_shift < self.tile_size {
+            if let Some(d) = self.direction {
+                self.move_offset(d);
+                self.acc_shift += 1.0;
             }
-       }
-    }
-
-    fn check_time(self: &mut Self, movement_speed: f32) -> bool {
-        if self.acc_time >= (0.3 / movement_speed) {return true}
-        else {return false}
+        }
+        //if the accumulated frame for movement exceeds 15 flip
+        if self.acc_shift >= self.tile_size {
+            self.frame_state = FrameState::Full;
+            self.direction = None;
+            self.acc_shift = 0.0;
+            self.just_flipped = true;
+        }
     }
 
 
     pub fn move_frame(
         self: &mut Self, 
         new_direction: Direction,
-        tile_size: f32,
     ) {
         if self.frame_state == FrameState::Mid {return}
         self.frame_state = FrameState::Mid;
         self.direction = Some(new_direction);
-        self.acc_time = 0.0;
-        self.move_offset(new_direction, tile_size);
+        self.acc_shift = 0.0;
     }
 
     fn move_offset(
         self: &mut Self, 
         new_direction: Direction,
-        tile_size: f32,
     ) {
-        let mut adj: f32 = 0.5 * tile_size * self.scale_f32();
+        let mut adj: f32 = (self.tile_size * self.scale_f32()) / self.tile_size as f32;
         match new_direction {
             Direction::Up => {self.inc_offset((0.0, adj))}
             Direction::Down => {self.inc_offset((0.0, -1.0 * adj))}
@@ -93,6 +94,8 @@ impl Frame {
     pub fn state(&self) -> FrameState {self.frame_state}
     pub fn scale_i32(&self) -> i32 {self.scale}
     pub fn scale_f32(&self) -> f32 {self.scale as f32}
+    pub fn just_flipped(&self) -> bool {return self.just_flipped}
+    
     pub fn inc_scale(self: &mut Self, inc: i32) {self.scale += inc}
 }
 

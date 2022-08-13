@@ -6,15 +6,15 @@ use super::frame::FrameState;
 
 
 #[derive(PartialEq)] 
-pub enum Midframe {
+pub enum SpriteMidFrame {
     Left,
     Right,
 }
-impl Midframe {
-    pub fn next(&self) -> Midframe {
+impl SpriteMidFrame {
+    pub fn next(&self) -> SpriteMidFrame {
         match self {
-            Midframe::Left => {return Midframe::Right;}
-            Midframe::Right => {return Midframe::Left;}
+            SpriteMidFrame::Left => {return SpriteMidFrame::Right;}
+            SpriteMidFrame::Right => {return SpriteMidFrame::Left;}
         }
     }
 }
@@ -23,7 +23,7 @@ impl Midframe {
 pub struct PlayerSheet {
     image: graphics::Image,
     image_size: glam::Vec2,    
-    midframe: Midframe,
+    midframe: SpriteMidFrame,
     sprite_rows: u32,
     sprite_cols: u32,
     sprite_size: glam::UVec2,
@@ -45,7 +45,7 @@ impl PlayerSheet {
         PlayerSheet {
             image,
             image_size,
-            midframe: Midframe::Left,
+            midframe: SpriteMidFrame::Left,
             sprite_rows: (image_size.y as u32 / sprite_size.y),
             sprite_cols: (image_size.x as u32 / sprite_size.x),
             sprite_size,
@@ -79,11 +79,17 @@ impl PlayerSheet {
     ) -> graphics::Rect {
 
         //Start with the idle sprite down at 0,0 
-        let img_xy = glam::UVec2::new(0,0);
+        let mut img_xy = glam::UVec2::new(0,0);
         //match the row for what action is hammening
         match action {
             player::PlayerAction::Idle => {}        //Do nothing
             player::PlayerAction::Walking => {
+                if frame == FrameState::Mid {
+                    match self.midframe {
+                        SpriteMidFrame::Right => {img_xy.y += 2}
+                        SpriteMidFrame::Left => {img_xy.y += 4}
+                    } 
+                }
             }
             player::PlayerAction::Running => {}
         }
@@ -91,13 +97,14 @@ impl PlayerSheet {
 
         let rect: graphics::Rect = graphics::Rect::new(
             pixel_xy.x as f32 / self.image_size.x,
-            pixel_xy.y as f32 / self.image_size.x,
+            pixel_xy.y as f32 / self.image_size.y,
             self.sprite_pixel_rect_wh.x,
             self.sprite_pixel_rect_wh.y
         );
         return rect;
     }
 
+    pub fn next_midframe(&mut self) {self.midframe = self.midframe.next()}
 }
 
 

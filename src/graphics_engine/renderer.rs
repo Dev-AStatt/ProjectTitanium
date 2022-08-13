@@ -25,7 +25,7 @@ impl Renderer {
             glam::IVec2::new(16,16), //Tile Pixel Size
             glam::IVec2::new(50,50)
         );
-        let frame = Frame::new();
+        let frame = Frame::new(tile_sheet.tile_size().x as f32);
         Renderer {
             tile_sheet,
             player_sheet: PlayerSheet::new(ctx),
@@ -45,6 +45,9 @@ impl Renderer {
             player.movement_speed(),
             time_delta,
         );
+        if self.frame.just_flipped() {
+            self.player_sheet.next_midframe();
+        }
     }
 
     pub fn draw(
@@ -114,9 +117,7 @@ impl Renderer {
         } 
     }
 
-    pub fn move_screen(self: &mut Self, d: Direction) {
-        self.frame.move_frame(d, self.tile_sheet.tile_size().x as f32);
-    }
+    pub fn move_screen(self: &mut Self, d: Direction) {self.frame.move_frame(d);}
     pub fn adj_scale(self: &mut Self, inc: i32) {self.frame.inc_scale(inc);}
 }
 
