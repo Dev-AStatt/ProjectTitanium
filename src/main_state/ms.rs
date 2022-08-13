@@ -89,7 +89,8 @@ impl event::EventHandler<ggez::GameError> for MainState {
         //ensure that we are in the overworld before adjusting scale
         match self.state.state_type() {
             StateType::Overworld => {
-                self.renderer.adj_scale(y as i32);
+                //self.renderer.adj_scale(y as i32);
+                //I think we are not going to have scale changing
             }
             _ => (),
         }
