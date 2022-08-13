@@ -2,6 +2,7 @@
 
 
 use ggez::{
+    timer,
     event::{self, MouseButton},
     graphics::{self, Drawable, Sampler},
     Context,
@@ -46,7 +47,11 @@ impl MainState {
 impl event::EventHandler<ggez::GameError> for MainState {
 
     fn update(&mut self, ctx: &mut Context) -> Result<(), ggez::GameError> {
-
+        self.renderer.update(
+            &self.state, 
+            &self.player,
+            ctx.time.delta().as_secs_f32()
+        );
         Ok(()) 
     }
 
@@ -64,11 +69,13 @@ impl event::EventHandler<ggez::GameError> for MainState {
         //this sets the sampler rate to be nearest completion, for 2d sprites
         canvas.set_sampler(Sampler::nearest_clamp());
 
-        self.renderer.draw_route(
+        self.renderer.draw(
             &mut canvas, 
-            self.world.current_route(),
-            &self.state
+            &self.state, 
+            &self.world.current_route(), 
+            &self.player
         );
+        //draw any additional debug information we need 
         self.draw_debug_info(&mut canvas, ctx);
 
 
@@ -77,23 +84,29 @@ impl event::EventHandler<ggez::GameError> for MainState {
 
     }
 
-
     //The ggez engine will call events automatically for key and mouse events
     fn mouse_wheel_event(&mut self, _ctx: &mut Context, _x: f32, y: f32) -> GameResult {
-        let new_scale = self.state.scale() + (y as i32);
-        self.state.set_scale(new_scale);
+        //ensure that we are in the overworld before adjusting scale
+        match self.state.state_type() {
+            StateType::Overworld => {
+                //self.renderer.adj_scale(y as i32);
+                //I think we are not going to have scale changing
+            }
+            _ => (),
+        }
         Ok(())
     }
 
     //The ggez engine will call events automatically for key and mouse events
     fn key_up_event(&mut self, _ctx: &mut Context, input: KeyInput) -> GameResult {
-        
+        //we match the state type to isolate what keys do        
         match self.state.state_type() {
             StateType::Overworld => {self.io_overworld(input)}
             _ => (),
         }
         Ok(())
     }
+
 
 
 }
