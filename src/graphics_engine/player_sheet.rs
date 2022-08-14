@@ -34,7 +34,7 @@ impl PlayerSheet {
     pub fn new(
         ctx: &mut Context,
     ) -> PlayerSheet {
-        let image = utilities::load_image(ctx, "/boy_sprite_sheet.png");
+        let image = utilities::load_image(ctx, "/tile_sets/boy_sprite_sheet.png");
         let image_size = glam::Vec2::new(image.width() as f32, image.height() as f32);
         let sprite_size = glam::UVec2::new(16,16);
         //sprite hight is going to be times 2 because charicter sprites are 32 tiles high
