@@ -102,7 +102,7 @@ impl Renderer {
             let final_dest = init_dest.as_vec2() + self.frame.offset();
             self.tile_sheet.draw_tile(
                 canvas,
-                route.tile_at(i),
+                route.tile_id_at(i),
                 final_dest,
                 self.frame.scale_f32()
             );

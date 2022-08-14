@@ -9,7 +9,7 @@ use std::{
     error::Error,
 };
 
-#[derive(Clone, Copy)]
+#[derive(Debug,Clone, Copy)]
 pub enum TileClass {
     Normal,
     Jump,
@@ -26,35 +26,75 @@ pub struct ImportedRouteJson {
     tilesets: Vec<ImportedTilesets>
 }
 impl ImportedRouteJson {
-    pub fn data_layer(&self, u: usize) -> Vec<i32> {return self.layers[u].data()}
     pub fn layer(&self, u: usize) -> &ImportedLayers {return &self.layers[u]}
+    pub fn num_tilesets(&self) -> usize {return self.tilesets.len()}
+    pub fn tilesets(&self) -> &Vec<ImportedTilesets> {return &self.tilesets}
 }
-
-#[derive(serde_derive::Deserialize, Debug)]
-pub struct ImportedTilesets {
-    firstgid: u32,
-    tiles: Vec<ImportedTiles>,
-}
-
-#[derive(serde_derive::Deserialize, Debug)]
-pub struct ImportedTiles {
-    id: u32,
-    class: String,
-    properties: Vec<ImpProperties>,
-}
-#[derive(serde_derive::Deserialize, Debug)]
-pub struct ImpProperties {
-    name: String,
-    value: bool,
-}
-
-
 #[derive(serde_derive::Deserialize, Debug)]
 pub struct ImportedLayers {
     data: Vec<i32>,
     height: u32,
     width: u32,
 }
+impl ImportedLayers {
+    pub fn data_by_ref(&self) -> &Vec<i32> {return &self.data}
+    pub fn data_len(&self) -> usize {return self.data.len()}
+}
+
+
+#[derive(serde_derive::Deserialize, Debug)]
+pub struct ImportedTilesets {
+    firstgid: u32,
+    pub tiles: Vec<ImportedTile>,
+}
+impl ImportedTilesets {
+    pub fn num_tiles_in_imported_sheet(&self) -> usize {return self.tiles.len()}
+    pub fn firstgid(&self) -> u32 {self.firstgid}
+    pub fn is_tile_walkable(&self, i: usize) -> bool {self.tiles[i].flag_val("Walkable".to_string())}
+    pub fn is_tile_spawner(&self, i: usize) -> bool {self.tiles[i].flag_val("Spawn".to_string())}
+    pub fn get_tile_class(&self, i: usize) -> TileClass {
+        
+        if i > self.tiles.len() {println!("ERROR HERE I: {} > Tile Length {}", i, self.tiles.len())}
+
+        let str = self.tiles[i].class.clone();
+        if str == "Normal" {return TileClass::Normal;}
+        if str == "Jump" {return TileClass::Jump;}
+        if str == "Door" {return TileClass::Door;}
+        
+        println!("Jaon Import Tile Error - Found unknown class: {} at ID: {}", str, i);
+        return TileClass::Normal;
+    }
+}
+
+
+#[derive(serde_derive::Deserialize, Debug)]
+pub struct ImportedTile {
+    id: u32,
+    class: String,
+    properties: Vec<ImpProperties>,
+}
+
+impl ImportedTile {
+    //checks through the vetor of properties for flag defined as string
+    pub fn flag_val(&self, f: String) -> bool {
+        //for each property for importedTiles
+        for i in 0..self.properties.len() {
+            if self.properties[i].name == f {
+                return self.properties[i].value;
+            }
+        }
+        println!("Json Import Tile Error - TileID: {} No {:?} flag found", self.id, f);
+        return false;
+    }
+}
+
+
+#[derive(serde_derive::Deserialize, Debug)]
+pub struct ImpProperties {
+    pub name: String,
+    pub value: bool,
+}
+
 
 impl ImportedLayers {
     pub fn data(&self) -> Vec<i32> {return self.data.clone()}
