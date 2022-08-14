@@ -22,7 +22,7 @@ impl Renderer {
         
         let tile_sheet = TileSheet::new(
             ctx, 
-            "/titanium_tile_sheet_v01.png",
+            "/tile_set/titanium_tile_sheet_v01.png",
             glam::IVec2::new(16,16), //Tile Pixel Size
             glam::IVec2::new(50,50)
         );
