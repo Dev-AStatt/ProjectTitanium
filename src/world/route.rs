@@ -1,5 +1,13 @@
 
-use super::json_importer;
+use super::json_importer::{self, TileClass};
+
+#[derive(Clone, Copy)]
+pub struct Tile {
+    global_id: i32,
+    class: TileClass,
+    walkable: bool,
+    spawn: bool,
+}
 
 #[derive(Clone)]
 pub struct Route {
@@ -11,7 +19,14 @@ pub struct Route {
 impl Route {
     pub fn new() -> Route {
 
-        let import_route = json_importer::read_json_from_file("../resources/routes/Titanium_Route1.json").unwrap();
+        let import_route = json_importer::read_json_from_file(
+            "../../resources/routes/titanium_town1_V02.json").unwrap();
+
+
+
+
+
+
         let tiles = import_route.data_layer(0);
 
         let route_size = glam::IVec2::new(
