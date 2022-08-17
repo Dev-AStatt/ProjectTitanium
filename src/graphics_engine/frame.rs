@@ -86,7 +86,7 @@ impl Frame {
         self.offset.x += adj.0; 
         self.offset.y += adj.1; 
     }
-    pub fn in_movement(&self) -> bool {self.frame_state == FrameState::Full}
+    pub fn in_movement(&self) -> bool {self.frame_state == FrameState::Mid}
     pub fn offset(&self) -> glam::Vec2 {self.offset}
     pub fn state(&self) -> FrameState {self.frame_state}
     pub fn scale_i32(&self) -> i32 {self.scale}

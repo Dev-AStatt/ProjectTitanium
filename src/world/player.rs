@@ -32,6 +32,19 @@ impl Player {
         }
     }
 
+    //Function will set player direction and incriment postion in 
+    //that direction
+    pub fn inc_position_in_direction(self: &mut Self, d: Direction) {
+        self.set_direction(d);
+        match d {
+            Direction::Up => {self.pos.y -= 1}
+            Direction::Down => {self.pos.y += 1}
+            Direction::Left => {self.pos.x -= 1}
+            Direction::Right => {self.pos.x += 1}
+        }
+    }
+
+
     pub fn current_action(&self) -> PlayerAction {return self.action}
     pub fn position(&self) -> glam::IVec2 {return self.pos}
     pub fn direction(&self) -> Direction {return self.direction}

@@ -13,6 +13,8 @@ impl ms::MainState {
         _canvas: &mut graphics::Canvas,
         ctx: &mut Context,
     ) {
+        //println!("Player Position: {}", self.player.position());
+
         
         //Draw an FPS Counter in the top bar 
         ctx.gfx.set_window_title(&format!(

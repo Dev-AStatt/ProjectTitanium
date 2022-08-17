@@ -84,9 +84,6 @@ impl Renderer {
         );
     }
 
-    
-
-
     fn draw_route(
         &self,
         canvas: &mut graphics::Canvas,
@@ -111,6 +108,7 @@ impl Renderer {
 
     pub fn move_screen(self: &mut Self, d: Direction) {self.frame.move_frame(d);}
     pub fn adj_scale(self: &mut Self, inc: i32) {self.frame.inc_scale(inc);}
+    pub fn frame_is_complete(&self) -> bool {!self.frame.in_movement()}
 }
 
 

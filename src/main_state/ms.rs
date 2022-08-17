@@ -9,7 +9,6 @@ use ggez::{
     input::keyboard::KeyInput,
 };
 
-
 use super::game_state::{GameState, StateType};
 use super::super::{
     graphics_engine::renderer,
@@ -99,10 +98,10 @@ impl event::EventHandler<ggez::GameError> for MainState {
             &mut self,
             _ctx: &mut Context,
             input: KeyInput,
-            _repeated: bool,
+            repeated: bool,
         ) -> Result<(), ggez::GameError> {
          match self.state.state_type() {
-            StateType::Overworld => {self.io_overworld(input)}
+            StateType::Overworld => {self.io_overworld(input, repeated)}
             _ => (),
         }
         Ok(())

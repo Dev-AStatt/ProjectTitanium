@@ -1,4 +1,6 @@
 
+
+use super::super::utilities::Direction;
 use super::json_importer::{self, TileClass, ImportedRouteJson};
 
 #[derive(Debug,Clone, Copy)]
@@ -42,6 +44,7 @@ impl Route {
             import_route.layer(0).width() as i32,
             import_route.layer(0).height() as i32
         );
+        println!("Route Size {}", route_size);
 
         Route{
             size: route_size,
@@ -51,6 +54,26 @@ impl Route {
     pub fn size(&self) -> glam::IVec2 {return self.size}
     pub fn tiles(&self) -> &Vec<Tile> {return &self.tiles} 
     pub fn tile_id_at(&self, i: usize) -> i32 {return self.tiles[i].global_id()}
+    pub fn is_tile_walkable(&self, pos: glam::IVec2) -> bool {
+        return self.tiles[self.index_from_ivec2(pos)].walkable();
+    }
+    pub fn is_tile_spawner(&self, pos: glam::IVec2) -> bool {
+        return self.tiles[self.index_from_ivec2(pos)].spawner();
+    }
+    pub fn next_tile(&self, pos: glam::IVec2, dir: Direction) -> &Tile {
+        let mut new_tile = pos;
+        match dir {
+            Direction::Up => {new_tile.y -= 1}
+            Direction::Down => {new_tile.y += 1}
+            Direction::Left => {new_tile.x -= 1}
+            Direction::Right => {new_tile.x += 1}
+        } 
+        return &self.tiles[self.index_from_ivec2(new_tile)]
+
+    }
+    fn index_from_ivec2(&self, p: glam::IVec2) -> usize {
+        return (p.x + (p.y * self.size.x)) as usize;
+    }
 
 }
 
